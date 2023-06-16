@@ -4,7 +4,7 @@ import imagePencil from './images/image_pencil.svg';
 
 function App() {
   return (
-    <div className="App">
+    // <div className="App">
       <body className="page">
     <header className="header">
         <img src={logoHeader} alt="логотип Mesto" className="header__logo"/>
@@ -12,7 +12,7 @@ function App() {
     <main className="main">
         <section className="profile">
             <div className="profile__info">
-                <div class="profile__container">
+                <div className="profile__container">
                     <img src="<%=require('./images/avatar.png')%>" alt="аватар пользователя" className="profile__image"/>
                     <div className="profile__image-overlay">
                         <img src={imagePencil} alt="кнопка смены аватара пользователя" className="profile__image-editing"/>
@@ -105,7 +105,7 @@ function App() {
         </article>
     </template>
 </body>
-    </div>
+    // </div>
   );
 }
 
