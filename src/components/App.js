@@ -1,15 +1,22 @@
-import './index.css';
-import logoHeader from './images/logo_header.svg';
-import imagePencil from './images/image_pencil.svg';
+import '../index.css';
+import Header from './Header.js';
+import Main from './Main.js';
+import Footer from './Footer.js';
+
+// import logoHeader from '../images/logo_header.svg';
+// import imagePencil from '../images/image_pencil.svg';
 
 function App() {
   return (
     // <div className="App">
       <body className="page">
-    <header className="header">
+        <Header />
+        <Main />
+        <Footer />
+    {/* <header className="header">
         <img src={logoHeader} alt="логотип Mesto" className="header__logo"/>
-    </header>
-    <main className="main">
+    </header> */}
+    {/* <main className="main">
         <section className="profile">
             <div className="profile__info">
                 <div className="profile__container">
@@ -30,10 +37,10 @@ function App() {
         </section>
         <section className="elements">
         </section>
-    </main>
-    <footer className="footer">
+    </main> */}
+    {/* <footer className="footer">
         <p className="footer__logo">&#169; 2023 Mesto Russia</p>
-    </footer>
+    </footer> */}
     <div className="popup popup-profile">
         <div className="popup__container">
             <button className="popup__button-close" type="button"></button>
