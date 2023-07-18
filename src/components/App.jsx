@@ -3,7 +3,7 @@ import Header from './Header.jsx';
 import Main from './Main.jsx';
 import Footer from './Footer.jsx';
 import PopupWithForm from './PopupWithForm.jsx';
-import PopupImage from './PopupImage.jsx';
+import ImagePopup from './ImagePopup.jsx';
 // import Card from './Card.jsx';
 import { useState } from 'react';
 
@@ -89,7 +89,7 @@ function App() {
             <span className="popup__input-error popup__input-error_type_avatar"></span>
         </PopupWithForm>
 
-        <PopupImage card={selectedCard} isOpen={imagePopup} onClose={closeAllPopups}/>
+        <ImagePopup card={selectedCard} isOpen={imagePopup} onClose={closeAllPopups}/>
 
         {/* <div className="popup popup-profile">
             <div className="popup__container">

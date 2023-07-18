@@ -1,6 +1,6 @@
 import React from "react";
 
-function PopupImage({card, isOpen, onClose}) {
+function ImagePopup({card, isOpen, onClose}) {
     return(
         // <div className="popup popup-image popup-image_background">
         <div className={`popup popup-image popup-image_background ${isOpen && 'popup_opened'}`}>
@@ -13,4 +13,4 @@ function PopupImage({card, isOpen, onClose}) {
     )
 }
 
-export default PopupImage;
+export default ImagePopup;
