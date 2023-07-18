@@ -4,7 +4,7 @@ import Main from './Main.jsx';
 import Footer from './Footer.jsx';
 import PopupWithForm from './PopupWithForm.jsx';
 import PopupImage from './PopupImage.jsx';
-import Card from './Card.jsx';
+// import Card from './Card.jsx';
 import { useState } from 'react';
 
 function App() {
@@ -27,20 +27,15 @@ function App() {
   }
 
   function closeAllPopups() {
-    setIsEditProfilePopupOpen(false)
-    setIsAddPlacePopupOpen(false)
-    setIsEditAvatarPopupOpen(false)
-    setImagePopup(false)
+    setIsEditProfilePopupOpen(false);
+    setIsAddPlacePopupOpen(false);
+    setIsEditAvatarPopupOpen(false);
+    setImagePopup(false);
   }
-
-//   function handleDeleteClick() {
-    
-//   }
 
   function handleCardClick(card) {
     setSelectedCard(card)
     setImagePopup(true)
-    // setEventListenerDocument()
   }
 
   return (
