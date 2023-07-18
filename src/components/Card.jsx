@@ -9,7 +9,7 @@ function Card({card, onCardClick}) {
                 <h2 className="element__name">{card.name}</h2>
                 <div className="element__group-like">
                     <button className="element__button-like" type="button" aria-label="Лайкнуть"></button>
-                    <p className="element__counter-like"></p>
+                    <p className="element__counter-like">{card.likes.length}</p>
                 </div>
             </div>
         </article>
