@@ -3,7 +3,7 @@ import imagePencil from '../images/image_pencil.svg';
 import Card from './Card.jsx';
 import api from '../utils/api.js';
 
-function Main({onEditProfile, onAddPlace, onEditAvatar, onCardClick}) {
+function Main({onEditProfile, onAddPlace, onEditAvatar, onCardClick, onDelete}) {
     const [userName, setUserName] = useState('');
     const [userDescription, setUserDescription] = useState('');
     const [userAvatar, setUserAvatar] = useState('');
@@ -50,7 +50,7 @@ function Main({onEditProfile, onAddPlace, onEditAvatar, onCardClick}) {
             <section className="elements">
                 {cards.map(data => {
                     return (
-                    <Card key = {data._id} card={data} onCardClick={onCardClick} />
+                    <Card key = {data._id} card={data} onCardClick={onCardClick} onDelete={onDelete} />
                     // <Card card={data} />
                     )
                 })}

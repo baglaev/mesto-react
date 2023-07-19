@@ -1,9 +1,9 @@
 import React from "react";
 
-function Card({card, onCardClick}) {
+function Card({card, onCardClick, onDelete}) {
     return(
         <article className="element">
-            <button className="element__button-delete" type="button" aria-label="Удалить"></button>
+            {card.myid === card.owner._id && <button className="element__button-delete" type="button" aria-label="Удалить" onClick={onDelete}></button>}
             <img src={card.link} alt={card.name} className="element__image" onClick={() => onCardClick({link: card.link, name: card.name})}/>
             <div className="element__title">
                 <h2 className="element__name">{card.name}</h2>
