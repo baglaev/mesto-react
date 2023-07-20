@@ -3,8 +3,10 @@ import Main from './Main.jsx';
 import Footer from './Footer.jsx';
 import PopupWithForm from './PopupWithForm.jsx';
 import ImagePopup from './ImagePopup.jsx';
+import api from '../utils/api.js';
 // import Card from './Card.jsx';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
+import CurrentUserContext from '../contexts/CurrentUserContext';
 
 function App() {
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
@@ -13,6 +15,29 @@ function App() {
   const [isDeletePopupOpen, setDeletePopup] = useState(false);
   const [imagePopup, setImagePopup] = useState(false);
   const [selectedCard, setSelectedCard] = useState({});
+  const [currentUser, setCurrentUser] = useState({});
+  const [cards, setCards] = useState([]);
+
+  const setCloseAllPopups = useCallback(() => {
+    setIsEditProfilePopupOpen(false);
+    setIsAddPlacePopupOpen(false);
+    setIsEditAvatarPopupOpen(false);
+    setImagePopup(false);
+    setDeletePopup(false);
+  }, [])
+
+  const closePopupByEsc = useCallback((e) => {
+    if (e.key === 'Escape') {
+        setCloseAllPopups();
+        document.removeEventListener('keydown', closePopupByEsc);
+    }
+  }, [setCloseAllPopups])
+
+  const closeAllPopups = useCallback(() => {
+    setCloseAllPopups();
+    document.removeEventListener('keydown', closePopupByEsc);
+  }, [setCloseAllPopups, closePopupByEsc])
+
 
   function handleEditProfileClick() {
     setIsEditProfilePopupOpen(true);
@@ -34,13 +59,13 @@ function App() {
     setEventListenerDocument();
   }
 
-  function closeAllPopups() {
-    setIsEditProfilePopupOpen(false);
-    setIsAddPlacePopupOpen(false);
-    setIsEditAvatarPopupOpen(false);
-    setImagePopup(false);
-    setDeletePopup(false);
-  }
+//   function closeAllPopups() {
+//     setIsEditProfilePopupOpen(false);
+//     setIsAddPlacePopupOpen(false);
+//     setIsEditAvatarPopupOpen(false);
+//     setImagePopup(false);
+//     setDeletePopup(false);
+//   }
 
   function handleCardClick(card) {
     setSelectedCard(card);
@@ -48,25 +73,42 @@ function App() {
     setEventListenerDocument();
   }
 
-  function closeAllPopupsOnOverlay(e) {
-    if (e.target === e.currentTarget) {
-        closeAllPopups();
-        document.removeEventListener('keydown', closePopupByEsc);
-    }
-  }
+//   function closeAllPopupsOnOverlay(e) {
+//     if (e.target === e.currentTarget) {
+//         closeAllPopups();
+//         document.removeEventListener('keydown', closePopupByEsc);
+//     }
+//   }
 
-  function closePopupByEsc(e) {
-    if (e.key === 'Escape') {
-        closeAllPopups();
-        document.removeEventListener('keydown', closePopupByEsc);
-    }
-  }
+//   function closePopupByEsc(e) {
+//     if (e.key === 'Escape') {
+//         closeAllPopups();
+//         document.removeEventListener('keydown', closePopupByEsc);
+//     }
+//   }
 
   function setEventListenerDocument() {
     document.addEventListener('keydown', closePopupByEsc);
   }
 
+  useEffect(() => {
+    Promise.all([api.getProfile(), api.getInitialCards()])
+        .then(([userInfo, cards]) => {
+            setCurrentUser(userInfo)
+            setCards(cards)
+            // setUserName(userInfo.name)
+            // setUserDescription(userInfo.about)
+            // setUserAvatar(userInfo.avatar)
+            // cards.forEach(userId => userId = userInfo._id)
+            // setCards(cards)
+        })
+        .catch((error) => {
+            console.log(`Ошибка ${error}`)
+        });
+}, [])
+
   return (
+    <CurrentUserContext.Provider value={currentUser}>
     <div className="page">
         <Header />
         <Main 
@@ -75,13 +117,14 @@ function App() {
             onEditAvatar = {handleEditAvatarClick}
             onCardClick = {handleCardClick}
             onDelete = {handleDeletePopupClick}
+            cards = {cards}
         />
         <Footer />
         <PopupWithForm
             name='popup-profile'
             title='Редактировать профиль'
             isOpen={isEditProfilePopupOpen}
-            onClose={closeAllPopupsOnOverlay}
+            onClose={closeAllPopups}
         >
             <input type="text" name="name" className="popup__input popup__input_profile_name" placeholder="Имя" minLength={2} maxLength={40} required=""/>
             <span className="popup__input-error popup__input-error_type_name"></span>
@@ -94,7 +137,7 @@ function App() {
             title='Новое место'
             titleButton='Создать'
             isOpen={isAddPlacePopupOpen}
-            onClose={closeAllPopupsOnOverlay}
+            onClose={closeAllPopups}
         >
             <input type="text" name="name" className="popup__input popup__input_image_name" placeholder="Название" minLength={2} maxLength={30} required=""/>
             <span className="popup__input-error popup__input-error_type_name"></span>
@@ -107,20 +150,20 @@ function App() {
             title='Вы уверены?'
             titleButton='Да'
             isOpen={isDeletePopupOpen}
-            onClose={closeAllPopupsOnOverlay}
+            onClose={closeAllPopups}
         />
 
         <PopupWithForm
             name='popup-avatar'
             title='Обновить аватар'
             isOpen={isEditAvatarPopupOpen}
-            onClose={closeAllPopupsOnOverlay}
+            onClose={closeAllPopups}
         >
             <input type="url" name="avatar" className="popup__input popup__input_image_avatar" placeholder="Ссылка на картинку" required=""/>
             <span className="popup__input-error popup__input-error_type_avatar"></span>
         </PopupWithForm>
 
-        <ImagePopup card={selectedCard} isOpen={imagePopup} onClose={closeAllPopupsOnOverlay}/>
+        <ImagePopup card={selectedCard} isOpen={imagePopup} onClose={closeAllPopups}/>
 
         {/* <div className="popup popup-profile">
             <div className="popup__container">
@@ -193,6 +236,7 @@ function App() {
             </article>
         </template> */}
     </div>
+    </CurrentUserContext.Provider>
   );
 }
 
