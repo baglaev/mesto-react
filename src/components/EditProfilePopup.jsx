@@ -3,7 +3,7 @@ import PopupWithForm from './PopupWithForm.jsx';
 import useFormValidator from '../utils/useFormValidator.js';
 import CurrentUserContext from '../contexts/CurrentUserContext.js';
 
-function EditProfilePopup({isOpen, onClose}) {
+function EditProfilePopup({isOpen, onClose, onHandleUser}) {
     const currentUser = useContext(CurrentUserContext);
     const {values, errors, hideInput, isValid, handleChange, resetValidation, setValue} = useFormValidator();
 
@@ -17,6 +17,11 @@ function EditProfilePopup({isOpen, onClose}) {
         resetValidation({name: currentUser.name, about: currentUser.about});
     }
 
+    function handleSubmit(e) {
+        e.preventDefault();
+        onHandleUser({name: values.name, about: values.about}, resetValidation);
+    }
+
     return (
         <PopupWithForm
             name='popup-profile'
@@ -24,6 +29,8 @@ function EditProfilePopup({isOpen, onClose}) {
             isOpen={isOpen}
             onClose={resetOnClose}
             isValid={isValid}
+            // isTransmit={isTransmit}
+            onSubmit={handleSubmit}
         >
             <input type="text" name="name" className={`popup__input popup__input_profile_name ${hideInput.name === undefined || hideInput.name ? '' : 'popup__input_border-underline'}`} placeholder="Имя" minLength={2} maxLength={40} required onChange={handleChange} value={values.name ? values.name : ''} />
             <span className="popup__input-error popup__input-error_type_name">{errors.name}</span>

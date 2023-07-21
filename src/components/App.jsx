@@ -8,6 +8,8 @@ import api from '../utils/api.js';
 import { useCallback, useEffect, useState } from 'react';
 import CurrentUserContext from '../contexts/CurrentUserContext';
 import EditProfilePopup from './EditProfilePopup.jsx';
+import EditAvatarPopup from './EditAvatarPopup.jsx';
+import AddPlacePopup from './AddPlacePopup.jsx';
 
 function App() {
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
@@ -16,7 +18,7 @@ function App() {
   const [isDeletePopupOpen, setDeletePopup] = useState(false);
   const [imagePopup, setImagePopup] = useState(false);
   const [selectedCard, setSelectedCard] = useState({});
-  const [isTransmit, setIsTransmit] = useState(false);
+//   const [isTransmit, setIsTransmit] = useState(false);
   const [currentUser, setCurrentUser] = useState({});
   const [cards, setCards] = useState([]);
   const [deleteCardId, setDeleteCardId] = useState('');
@@ -77,16 +79,40 @@ function App() {
     setEventListenerDocument();
   }
 
+  function handleUser(userInfo, resetValidation) {
+    api.editProfile(userInfo.name, userInfo.about)
+        .then(res => {
+            setCurrentUser(res)
+            closeAllPopups()
+            resetValidation()
+        })
+        .catch((error) => {
+            console.log(`Ошибка ${error}`)
+        });
+  }
+
+  function handleUpdateAvatar(userInfo, resetValidation) {
+    api.handleAvatar(userInfo.avatar)
+        .then(res => {
+            setCurrentUser(res)
+            closeAllPopups()
+            resetValidation()
+        })
+        .catch((error) => {
+            console.log(`Ошибка ${error}`)
+        });
+  }
+
   function handleDeleteSubmit(e) {
     e.preventDefault();
-    setIsTransmit(true);
+    // setIsTransmit(true);
     api.deleteCard(deleteCardId)
         .then(() => {
             setCards(cards.filter(item => {
                 return item._id !== deleteCardId;
             }));
             closeAllPopups();
-            setIsTransmit(false);
+            // setIsTransmit(false);
         })
         .catch((error) => {
             console.log(`Ошибка ${error}`)
@@ -152,9 +178,11 @@ function App() {
             <span className="popup__input-error popup__input-error_type_about"></span>
         </PopupWithForm> */}
 
-        <EditProfilePopup isOpen={isEditProfilePopupOpen} onClose={closeAllPopups} />
+        <EditProfilePopup isOpen={isEditProfilePopupOpen} onClose={closeAllPopups} onHandleUser={handleUser} />
 
-        <PopupWithForm
+        <AddPlacePopup isOpen={isAddPlacePopupOpen} onClose={closeAllPopups} />
+
+        {/* <PopupWithForm
             name='popup-card'
             title='Новое место'
             titleButton='Создать'
@@ -165,7 +193,7 @@ function App() {
             <span className="popup__input-error popup__input-error_type_name"></span>
             <input type="url" name="link" className="popup__input popup__input_image_link" placeholder="Ссылка на картинку" required />
             <span className="popup__input-error popup__input-error_type_link"></span>
-        </PopupWithForm>
+        </PopupWithForm> */}
 
         <PopupWithForm
             name='popup-delete"'
@@ -174,10 +202,10 @@ function App() {
             isOpen={isDeletePopupOpen}
             onClose={closeAllPopups}
             onSubmit={handleDeleteSubmit}
-            isTransmit={isTransmit}
+            // isTransmit={isTransmit}
         />
-
-        <PopupWithForm
+        <EditAvatarPopup onUpdateAvatar = {handleUpdateAvatar} isOpen={isEditAvatarPopupOpen} onClose={closeAllPopups} onHandleUser={handleUser} />
+        {/* <PopupWithForm
             name='popup-avatar'
             title='Обновить аватар'
             isOpen={isEditAvatarPopupOpen}
@@ -185,7 +213,7 @@ function App() {
         >
             <input type="url" name="avatar" className="popup__input popup__input_image_avatar" placeholder="Ссылка на картинку" required />
             <span className="popup__input-error popup__input-error_type_avatar"></span>
-        </PopupWithForm>
+        </PopupWithForm> */}
 
         <ImagePopup card={selectedCard} isOpen={imagePopup} onClose={closeAllPopups}/>
 
