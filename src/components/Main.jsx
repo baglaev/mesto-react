@@ -1,8 +1,9 @@
 import React, { useContext } from 'react';
 import imagePencil from '../images/image_pencil.svg';
 import Card from './Card.jsx';
+import CurrentUserContext from '../contexts/CurrentUserContext.js';
 // import api from '../utils/api.js';
-import CurrentUserContext from '../contexts/CurrentUserContext';
+
 
 function Main({onEditProfile, onAddPlace, onEditAvatar, onCardClick, onDelete, cards}) {
     const currentUser = useContext(CurrentUserContext);
@@ -40,7 +41,7 @@ function Main({onEditProfile, onAddPlace, onEditAvatar, onCardClick, onDelete, c
                             <h1 className="profile__title">{currentUser.name ? currentUser.name : ''}</h1>
                             <button className="profile__button-edit" type="button" aria-label="Редактировать" onClick={onEditProfile}></button>
                         </div>
-                        <p className="profile__job-title">{currentUser.about ? currentUser : ''}</p>
+                        <p className="profile__job-title">{currentUser.about ? currentUser.about : ''}</p>
                     </div>
                 </div>
                 <button className="profile__button-add" type="button" aria-label="Добавить" onClick={onAddPlace}></button>
