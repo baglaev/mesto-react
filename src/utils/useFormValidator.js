@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 
 function useFormValidator() {
     const[values, setValues] = useState({});
@@ -14,22 +14,35 @@ function useFormValidator() {
         const form = e.target.form;
         
         setValues((oldValues) => {
-            return {...oldValues, [name] : value};
-        })
+            return {...oldValues, [name]: value};
+        });
 
         setErrors((oldErrors) => {
-            return {...oldErrors, [name] : validationMessage};
-        })
+            return {...oldErrors, [name]: validationMessage};
+        });
 
         setHideInput((oldValid) => {
-            return {...oldValid, [name] : valid};
-        })
+            return {...oldValid, [name]: valid};
+        });
 
         setIsValid(form.checkValidity());
 
     }
 
-    return {values, errors, hideInput, isValid, handleChange};
+    function resetValidation(data = {}) {
+        setValues(data);
+        setErrors({});
+        setHideInput({});
+        setIsValid(false);
+    }
+
+    const setValue = useCallback((name, value) => {
+        setValues((oldValues) => {
+            return {...oldValues, [name]: value} 
+        });
+    }, []);
+
+    return {values, errors, hideInput, isValid, handleChange, resetValidation, setValue};
 }
 
 export default useFormValidator;
