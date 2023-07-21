@@ -15,9 +15,10 @@ function App() {
   const [isDeletePopupOpen, setDeletePopup] = useState(false);
   const [imagePopup, setImagePopup] = useState(false);
   const [selectedCard, setSelectedCard] = useState({});
+  const [isTransmit, setIsTransmit] = useState(false);
   const [currentUser, setCurrentUser] = useState({});
   const [cards, setCards] = useState([]);
-  const [deleteCard, setDeleteCard] = useState('');
+  const [deleteCardId, setDeleteCardId] = useState('');
 
   const setCloseAllPopups = useCallback(() => {
     setIsEditProfilePopupOpen(false);
@@ -55,7 +56,8 @@ function App() {
     setEventListenerDocument();
   }
 
-  function handleDeletePopupClick() {
+  function handleDeletePopupClick(cardId) {
+    setDeleteCardId(cardId);
     setDeletePopup(true);
     setEventListenerDocument();
   }
@@ -72,6 +74,22 @@ function App() {
     setSelectedCard(card);
     setImagePopup(true);
     setEventListenerDocument();
+  }
+
+  function handleDeleteSubmit(e) {
+    e.preventDefault();
+    setIsTransmit(true);
+    api.deleteCard(deleteCardId)
+        .then(() => {
+            setCards(cards.filter(item => {
+                return item._id !== deleteCardId;
+            }));
+            closeAllPopups();
+            setIsTransmit(false);
+        })
+        .catch((error) => {
+            console.log(`Ошибка ${error}`)
+        });
   }
 
 //   function closeAllPopupsOnOverlay(e) {
@@ -121,17 +139,17 @@ function App() {
             cards = {cards}
         />
         <Footer />
-        <PopupWithForm
+        {/* <PopupWithForm
             name='popup-profile'
             title='Редактировать профиль'
             isOpen={isEditProfilePopupOpen}
             onClose={closeAllPopups}
         >
-            <input type="text" name="name" className="popup__input popup__input_profile_name" placeholder="Имя" minLength={2} maxLength={40} required=""/>
+            <input type="text" name="name" className="popup__input popup__input_profile_name" placeholder="Имя" minLength={2} maxLength={40} required />
             <span className="popup__input-error popup__input-error_type_name"></span>
-            <input type="text" name="about" className="popup__input popup__input_profile_about" placeholder="Должность" minLength={2} maxLength={200} required=""/>
+            <input type="text" name="about" className="popup__input popup__input_profile_about" placeholder="Должность" minLength={2} maxLength={200} required />
             <span className="popup__input-error popup__input-error_type_about"></span>
-        </PopupWithForm>
+        </PopupWithForm> */}
 
         <PopupWithForm
             name='popup-card'
@@ -140,9 +158,9 @@ function App() {
             isOpen={isAddPlacePopupOpen}
             onClose={closeAllPopups}
         >
-            <input type="text" name="name" className="popup__input popup__input_image_name" placeholder="Название" minLength={2} maxLength={30} required=""/>
+            <input type="text" name="name" className="popup__input popup__input_image_name" placeholder="Название" minLength={2} maxLength={30} required />
             <span className="popup__input-error popup__input-error_type_name"></span>
-            <input type="url" name="link" className="popup__input popup__input_image_link" placeholder="Ссылка на картинку" required=""/>
+            <input type="url" name="link" className="popup__input popup__input_image_link" placeholder="Ссылка на картинку" required />
             <span className="popup__input-error popup__input-error_type_link"></span>
         </PopupWithForm>
 
@@ -152,6 +170,8 @@ function App() {
             titleButton='Да'
             isOpen={isDeletePopupOpen}
             onClose={closeAllPopups}
+            onSubmit={handleDeleteSubmit}
+            isTransmit={isTransmit}
         />
 
         <PopupWithForm
@@ -160,7 +180,7 @@ function App() {
             isOpen={isEditAvatarPopupOpen}
             onClose={closeAllPopups}
         >
-            <input type="url" name="avatar" className="popup__input popup__input_image_avatar" placeholder="Ссылка на картинку" required=""/>
+            <input type="url" name="avatar" className="popup__input popup__input_image_avatar" placeholder="Ссылка на картинку" required />
             <span className="popup__input-error popup__input-error_type_avatar"></span>
         </PopupWithForm>
 
