@@ -29,7 +29,6 @@ function EditProfilePopup({isOpen, onClose, onHandleUser}) {
             isOpen={isOpen}
             onClose={resetOnClose}
             isValid={isValid}
-            // isTransmit={isTransmit}
             onSubmit={handleSubmit}
         >
             <input type="text" name="name" className={`popup__input popup__input_profile_name ${hideInput.name === undefined || hideInput.name ? '' : 'popup__input_border-underline'}`} placeholder="Имя" minLength={2} maxLength={40} required onChange={handleChange} value={values.name ? values.name : ''} />
