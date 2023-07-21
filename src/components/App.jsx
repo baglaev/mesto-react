@@ -17,6 +17,7 @@ function App() {
   const [selectedCard, setSelectedCard] = useState({});
   const [currentUser, setCurrentUser] = useState({});
   const [cards, setCards] = useState([]);
+  const [deleteCard, setDeleteCard] = useState('');
 
   const setCloseAllPopups = useCallback(() => {
     setIsEditProfilePopupOpen(false);
@@ -105,7 +106,7 @@ function App() {
         .catch((error) => {
             console.log(`Ошибка ${error}`)
         });
-}, [])
+  }, [])
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
