@@ -7,6 +7,7 @@ import api from '../utils/api.js';
 // import Card from './Card.jsx';
 import { useCallback, useEffect, useState } from 'react';
 import CurrentUserContext from '../contexts/CurrentUserContext';
+import EditProfilePopup from './EditProfilePopup.jsx';
 
 function App() {
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
@@ -150,6 +151,8 @@ function App() {
             <input type="text" name="about" className="popup__input popup__input_profile_about" placeholder="Должность" minLength={2} maxLength={200} required />
             <span className="popup__input-error popup__input-error_type_about"></span>
         </PopupWithForm> */}
+
+        <EditProfilePopup isOpen={isEditProfilePopupOpen} onClose={closeAllPopups} />
 
         <PopupWithForm
             name='popup-card'
